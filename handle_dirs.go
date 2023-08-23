@@ -207,6 +207,9 @@ func (c *clientHandler) handleLIST(param string) error {
 func (c *clientHandler) handleNLST(param string) error {
 	info := fmt.Sprintf("NLST %v", param)
 
+	// wildcards are not supported,example: NLST /*
+	param = strings.TrimSuffix(param, "*")
+
 	if files, parentDir, err := c.getFileList(param, true); err == nil || err == io.EOF {
 		if tr, errTrOpen := c.TransferOpen(info); errTrOpen == nil {
 			err = c.dirTransferNLST(tr, files, parentDir)
